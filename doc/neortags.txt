@@ -1,0 +1,7 @@
+*neortags.txt*	RTags for neovim.
+
+Version: 0.1
+Author: Mikael Larsson <c.mikael.larsson at gmail.com>
+License: TBD
+
+==============================================================================
