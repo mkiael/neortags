@@ -1,15 +1,22 @@
-
 import re
 import subprocess
+
 
 class RtagsClient(object):
     def __init__(self):
         pass
 
-    def _call(self, args):
-        cmd = 'rc {}'.format(args)
+    def find_references(self, cur_pos):
+        result = self._call_rc("-r {} -e".format(cur_pos))
+        return self._split_to_list(result)
+
+    def follow_location(self, cur_pos):
+        result = self._call_rc('-f {}'.format(cur_pos))
+        return self._split_to_list(result)
+
+    def _call_rc(self, args):
+        cmd = 'rc --absolute-path {}'.format(args)
         return subprocess.check_output(cmd, shell=True).decode('utf-8')
 
-    def req_find_references(self, cur_pos):
-        result = self._call("--absolute-path -r {} -e".format(cur_pos))
+    def _split_to_list(self, result):
         return list(filter(None, [re.sub('\s+', ' ', s) for s in result.split('\n')]))
