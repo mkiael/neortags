@@ -28,3 +28,9 @@ class Neortags(object):
             self._nvim.display_result(result)
         elif len(result) == 1:
             self._nvim.jump_to(result[0])
+
+    @neovim.function(name='NeortagsSymbolInfo', sync=True)
+    def symbol_info(self, args):
+        cur_pos = self._nvim.get_current_pos()
+        result = self._rtags_client.get_symbol_info(cur_pos)
+        self._nvim.print_message('\n'.join(result))
