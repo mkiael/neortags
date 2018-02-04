@@ -1,7 +1,7 @@
 import neovim
 
-from neortags.nvim_wrapper import NvimWrapper
-from neortags.rtags_client import RtagsClient
+from .nvim_wrapper import NvimWrapper
+from .rtags_client import RtagsClient
 
 
 @neovim.plugin
