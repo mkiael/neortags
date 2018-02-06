@@ -2,7 +2,7 @@ import re
 import subprocess
 
 
-class RtagsClient(object):
+class RtagsClient:
     def __init__(self):
         pass
 
