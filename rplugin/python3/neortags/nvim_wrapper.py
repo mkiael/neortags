@@ -1,18 +1,11 @@
-import json
-
-
-class NvimWrapper(object):
-
-
+class NvimWrapper:
     def __init__(self, nvim):
         self._nvim = nvim
-
 
     def get_current_pos(self):
         file_path = self._nvim.call('expand', '%')
         lnum, col = self._nvim.call('getcurpos')[1:3]
         return "{}:{}:{}".format(file_path, lnum, col)
-
 
     def display_result(self, result):
         location_list = self._parse_result(result)
@@ -21,17 +14,14 @@ class NvimWrapper(object):
             self._nvim.call('setloclist', win_nr, location_list)
             self._nvim.command('lopen')
 
-
     def jump_to(self, result_str):
         file_path, lnum, col, description = self._parse_result_str(result_str)
         if file_path != self._nvim.call('expand', '%:p'):
             self._nvim.command('e {}'.format(file_path))
         self._nvim.call('cursor', lnum, col)
 
-
     def print_message(self, msg):
         self._nvim.command('echo "%s"' % msg)
-
 
     def _parse_result(self, result):
         location_list = []
@@ -41,9 +31,7 @@ class NvimWrapper(object):
             location_list.append(entry)
         return location_list
 
-
     def _parse_result_str(self, s):
         location, description = s.split(' ', 1)
         file_path, lnum, col = filter(None, location.split(':'))
         return file_path, lnum, col, description
-
