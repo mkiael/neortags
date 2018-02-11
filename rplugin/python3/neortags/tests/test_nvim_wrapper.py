@@ -81,3 +81,17 @@ def test_display_result_in_qf(nvim_instance, nvim_wrapper):
     assert actual_result[1]['text'] == '   test1.print(1);'
     assert actual_result[2]['lnum'] == 23
     assert actual_result[2]['col'] == 10
+
+
+def test_display_in_preview(nvim_instance, nvim_wrapper):
+    # Act
+    nvim_wrapper.display_in_preview("line1\nline2\n\nline4")
+
+    # Assert
+    for w in nvim_instance.windows:
+        is_preview = w.options['previewwindow']
+        if is_preview:
+            assert w.buffer[:] == ["line1", "line2", "", "line4"]
+            break
+    else:
+        assert False, "Could not find preview window"
