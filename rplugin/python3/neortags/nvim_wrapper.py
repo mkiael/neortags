@@ -1,18 +1,35 @@
+import neovim
+
+
 class NvimWrapper:
-    def __init__(self, nvim):
+    def __init__(self, nvim: neovim.Nvim):
         self._nvim = nvim
 
-    def get_current_pos(self):
+    @property
+    def use_qf(self) -> bool:
+        use_qf = bool(self._nvim.vars.get('neortags_use_qf', False))
+        return use_qf
+
+    @property
+    def current_path(self) -> str:
         file_path = self._nvim.call('expand', '%')
+        return file_path
+
+    def get_current_pos(self):
+        file_path = self.current_path
         lnum, col = self._nvim.call('getcurpos')[1:3]
         return "{}:{}:{}".format(file_path, lnum, col)
 
-    def display_result(self, result):
-        location_list = self._parse_result(result)
-        if len(location_list) > 0:
-            win_nr = self._nvim.call('winnr')
-            self._nvim.call('setloclist', win_nr, location_list)
-            self._nvim.command('lopen')
+    def display_in_qf_or_loclist(self, result):
+        result_list = self._parse_result(result)
+        if len(result_list) > 0:
+            if self.use_qf:
+                self._nvim.call('setqflist', result_list)
+                self._nvim.command('copen')
+            else:
+                win_nr = self._nvim.call('winnr')
+                self._nvim.call('setloclist', win_nr, result_list)
+                self._nvim.command('lopen')
 
     def jump_to(self, result_str):
         file_path, lnum, col, description = self._parse_result_str(result_str)

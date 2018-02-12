@@ -14,14 +14,14 @@ class Neortags:
     def find_references(self, args):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.find_references(cur_pos)
-        self._nvim.display_result(result)
+        self._nvim.display_in_qf_or_loclist(result)
 
     @neovim.function(name='NeortagsJumpTo', sync=True)
     def jump_to(self, args):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.follow_location(cur_pos)
         if len(result) > 1:
-            self._nvim.display_result(result)
+            self._nvim.display_in_qf_or_loclist(result)
         elif len(result) == 1:
             self._nvim.jump_to(result[0])
 
