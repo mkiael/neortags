@@ -18,6 +18,10 @@ class RtagsClient:
         result = self._call_rc('--symbol-info {}'.format(cur_pos))
         return self._split_to_list(result)
 
+    def get_preprocessed_file(self, path: str) -> str:
+        result = self._call_rc('--preprocess {}'.format(path))
+        return result
+
     def _call_rc(self, args):
         cmd = 'rc --absolute-path {}'.format(args)
         return subprocess.check_output(cmd, shell=True).decode('utf-8')

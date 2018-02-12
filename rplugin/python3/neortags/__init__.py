@@ -30,3 +30,9 @@ class Neortags:
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.get_symbol_info(cur_pos)
         self._nvim.print_message('\n'.join(result))
+
+    @neovim.function(name='NeortagsPreprocess', sync=True)
+    def preprocess(self, args):
+        path = self._nvim.current_path
+        result = self._rtags_client.get_preprocessed_file(path)
+        self._nvim.display_in_preview(result)
