@@ -16,6 +16,12 @@ class Neortags:
         result = self._rtags_client.find_references(cur_pos)
         self._nvim.display_in_qf_or_loclist(result)
 
+    @neovim.function(name='NeortagsFindVirtuals', sync=True)
+    def find_virtuals(self, args):
+        cur_pos = self._nvim.get_current_pos()
+        result = self._rtags_client.find_virtuals(cur_pos)
+        self._nvim.display_in_qf_or_loclist(result)
+
     @neovim.function(name='NeortagsJumpTo', sync=True)
     def jump_to(self, args):
         cur_pos = self._nvim.get_current_pos()

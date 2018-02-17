@@ -6,15 +6,19 @@ class RtagsClient:
     def __init__(self):
         pass
 
-    def find_references(self, cur_pos):
+    def find_references(self, cur_pos) -> list:
         result = self._call_rc("--references {} --all-references".format(cur_pos))
         return self._split_to_list(result)
 
-    def follow_location(self, cur_pos):
+    def find_virtuals(self, cur_pos) -> list:
+        result = self._call_rc("--references {} --find-virtuals".format(cur_pos))
+        return self._split_to_list(result)
+
+    def follow_location(self, cur_pos) -> list:
         result = self._call_rc('--follow-location {}'.format(cur_pos))
         return self._split_to_list(result)
 
-    def get_symbol_info(self, cur_pos):
+    def get_symbol_info(self, cur_pos) -> list:
         result = self._call_rc('--symbol-info {}'.format(cur_pos))
         return self._split_to_list(result)
 
@@ -26,5 +30,5 @@ class RtagsClient:
         cmd = 'rc --absolute-path {}'.format(args)
         return subprocess.check_output(cmd, shell=True).decode('utf-8')
 
-    def _split_to_list(self, result):
+    def _split_to_list(self, result) -> list:
         return list(filter(None, [re.sub('\s+', ' ', s) for s in result.split('\n')]))
