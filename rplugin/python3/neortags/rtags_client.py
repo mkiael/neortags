@@ -7,11 +7,11 @@ class RtagsClient:
         pass
 
     def find_references(self, cur_pos):
-        result = self._call_rc("-r {} -e".format(cur_pos))
+        result = self._call_rc("--references {} --all-references".format(cur_pos))
         return self._split_to_list(result)
 
     def follow_location(self, cur_pos):
-        result = self._call_rc('-f {}'.format(cur_pos))
+        result = self._call_rc('--follow-location {}'.format(cur_pos))
         return self._split_to_list(result)
 
     def get_symbol_info(self, cur_pos):
