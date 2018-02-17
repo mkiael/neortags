@@ -48,6 +48,7 @@ class NvimWrapper:
 
     def jump_to(self, result_str):
         file_path, lnum, col, description = self._parse_result_str(result_str)
+        self._nvim.command("normal! m`")
         if file_path != self._nvim.call('expand', '%:p'):
             self._nvim.command('e {}'.format(file_path))
         self._nvim.call('cursor', lnum, col)
