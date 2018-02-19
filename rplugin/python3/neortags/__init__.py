@@ -10,19 +10,19 @@ class Neortags:
         self._nvim = NvimWrapper(nvim)
         self._rtags_client = RtagsClient()
 
-    @neovim.function(name='NeortagsFindReferences', sync=True)
+    @neovim.function(name='NeortagsFindReferences', sync=False)
     def find_references(self, args):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.find_references(cur_pos)
         self._nvim.display_in_qf_or_loclist(result)
 
-    @neovim.function(name='NeortagsFindVirtuals', sync=True)
+    @neovim.function(name='NeortagsFindVirtuals', sync=False)
     def find_virtuals(self, args):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.find_virtuals(cur_pos)
         self._nvim.display_in_qf_or_loclist(result)
 
-    @neovim.function(name='NeortagsJumpTo', sync=True)
+    @neovim.function(name='NeortagsJumpTo', sync=False)
     def jump_to(self, args):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.follow_location(cur_pos)
@@ -31,13 +31,13 @@ class Neortags:
         elif len(result) == 1:
             self._nvim.jump_to(result[0])
 
-    @neovim.function(name='NeortagsSymbolInfo', sync=True)
+    @neovim.function(name='NeortagsSymbolInfo', sync=False)
     def symbol_info(self, args):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.get_symbol_info(cur_pos)
         self._nvim.print_message('\n'.join(result))
 
-    @neovim.function(name='NeortagsPreprocess', sync=True)
+    @neovim.function(name='NeortagsPreprocess', sync=False)
     def preprocess(self, args):
         path = self._nvim.current_path
         result = self._rtags_client.get_preprocessed_file(path)
