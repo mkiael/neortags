@@ -1,6 +1,10 @@
 import pytest
-
+import neovim
 from neortags import NvimWrapper
+
+
+def get_preview_window(nvim: neovim.Nvim):
+    return next((windows for windows in nvim.windows if windows.options['previewwindow']), None)
 
 
 @pytest.fixture
@@ -88,13 +92,8 @@ def test_display_in_preview(nvim_instance, nvim_wrapper):
     nvim_wrapper.display_in_preview("line1\nline2\n\nline4")
 
     # Assert
-    for w in nvim_instance.windows:
-        is_preview = w.options['previewwindow']
-        if is_preview:
-            assert w.buffer[:] == ["line1", "line2", "", "line4"]
-            break
-    else:
-        assert False, "Could not find preview window"
+    preview_window = get_preview_window(nvim_instance)
+    assert preview_window.buffer[:] == ["line1", "line2", "", "line4"]
 
 
 def test_display_in_preview_does_nothing_if_empty_text(nvim_instance, nvim_wrapper):
@@ -102,9 +101,5 @@ def test_display_in_preview_does_nothing_if_empty_text(nvim_instance, nvim_wrapp
     nvim_wrapper.display_in_preview("")
 
     # Assert
-    for w in nvim_instance.windows:
-        is_preview = w.options['previewwindow']
-        if is_preview:
-            assert False, "Preview window opened although it should not"
-    else:
-        assert True, "Preview window should not be visible"
+    preview_window = get_preview_window(nvim_instance)
+    assert preview_window is None, "Preview window should not be opened"
