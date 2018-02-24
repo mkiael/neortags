@@ -95,3 +95,16 @@ def test_display_in_preview(nvim_instance, nvim_wrapper):
             break
     else:
         assert False, "Could not find preview window"
+
+
+def test_display_in_preview_does_nothing_if_empty_text(nvim_instance, nvim_wrapper):
+    # Act
+    nvim_wrapper.display_in_preview("")
+
+    # Assert
+    for w in nvim_instance.windows:
+        is_preview = w.options['previewwindow']
+        if is_preview:
+            assert False, "Preview window opened although it should not"
+    else:
+        assert True, "Preview window should not be visible"

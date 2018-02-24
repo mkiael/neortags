@@ -26,6 +26,10 @@ class RtagsClient:
         result = self._call_rc('--preprocess {}'.format(path))
         return result
 
+    def dump_class_hierarchy(self, cur_pos) -> str:
+        result = self._call_rc('--class-hierarchy {}'.format(cur_pos))
+        return result
+
     def _call_rc(self, args) -> str:
         cmd = 'rc --absolute-path {}'.format(args)
         try:

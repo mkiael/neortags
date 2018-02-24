@@ -32,19 +32,20 @@ class NvimWrapper:
                 self._nvim.command('lopen')
 
     def display_in_preview(self, text: str):
-        self._nvim.command("pedit! Preview")
-        self._nvim.command("wincmd P")
-        self._nvim.command("wincmd L")
-        self._nvim.current.buffer[:] = text.splitlines()
+        if text:
+            self._nvim.command("pedit! Preview")
+            self._nvim.command("wincmd P")
+            self._nvim.command("wincmd L")
+            self._nvim.current.buffer[:] = text.splitlines()
 
-        self._nvim.current.buffer.options['buftype'] = 'nofile'
-        self._nvim.current.buffer.options['bufhidden'] = 'wipe'
-        self._nvim.current.buffer.options['buflisted'] = False
-        self._nvim.current.window.options['spell'] = False
-        self._nvim.current.window.options['foldenable'] = False
-        self._nvim.current.window.options['colorcolumn'] = ''
-        self._nvim.current.window.options['cursorline'] = True
-        self._nvim.current.window.options['cursorcolumn'] = False
+            self._nvim.current.buffer.options['buftype'] = 'nofile'
+            self._nvim.current.buffer.options['bufhidden'] = 'wipe'
+            self._nvim.current.buffer.options['buflisted'] = False
+            self._nvim.current.window.options['spell'] = False
+            self._nvim.current.window.options['foldenable'] = False
+            self._nvim.current.window.options['colorcolumn'] = ''
+            self._nvim.current.window.options['cursorline'] = True
+            self._nvim.current.window.options['cursorcolumn'] = False
 
     def jump_to(self, result_str):
         file_path, lnum, col, description = self._parse_result_str(result_str)
