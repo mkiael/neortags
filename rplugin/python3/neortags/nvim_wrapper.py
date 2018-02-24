@@ -12,7 +12,7 @@ class NvimWrapper:
 
     @property
     def current_path(self) -> str:
-        file_path = self._nvim.call('expand', '%')
+        file_path = self._nvim.call('expand', '%:p')
         return file_path
 
     def get_current_pos(self):
@@ -53,7 +53,7 @@ class NvimWrapper:
         self._nvim.call('cursor', lnum, col)
 
     def print_message(self, msg):
-        self._nvim.command('echo "%s"' % msg)
+        self._nvim.command('echo \'{}\''.format(msg))
 
     def _parse_result(self, result):
         location_list = []

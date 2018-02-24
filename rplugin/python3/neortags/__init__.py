@@ -43,6 +43,16 @@ class Neortags:
         result = self._rtags_client.get_preprocessed_file(path)
         self._nvim.display_in_preview(result)
 
+    @neovim.command(name='NeortagsFindIncludeFile', sync=False, nargs=1)
+    def find_include_file(self, args):
+        if args:
+            symbol = args[0]
+            path = self._nvim.current_path
+            result = self._rtags_client.include_file(path, symbol) or "No include found"
+            self._nvim.print_message(result)
+        else:
+            self._nvim.print_message("Must give an argument")
+
     @neovim.command(name='NeortagsClassHierarchy', sync=False)
     def class_hierarchy(self):
         cur_pos = self._nvim.get_current_pos()
