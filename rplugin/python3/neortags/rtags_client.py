@@ -26,9 +26,12 @@ class RtagsClient:
         result = self._call_rc('--preprocess {}'.format(path))
         return result
 
-    def _call_rc(self, args):
+    def _call_rc(self, args) -> str:
         cmd = 'rc --absolute-path {}'.format(args)
-        return subprocess.check_output(cmd, shell=True).decode('utf-8')
+        try:
+            return subprocess.check_output(cmd, shell=True).decode('utf-8')
+        except subprocess.CalledProcessError:
+            return ''
 
     def _split_to_list(self, result) -> list:
         return list(filter(None, [re.sub('\s+', ' ', s) for s in result.split('\n')]))
