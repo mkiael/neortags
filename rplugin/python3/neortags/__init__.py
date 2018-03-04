@@ -42,3 +42,12 @@ class Neortags:
         path = self._nvim.current_path
         result = self._rtags_client.get_preprocessed_file(path)
         self._nvim.display_in_preview(result)
+
+    @neovim.function(name='NeortagsClassHierarchy', sync=False)
+    def class_hierarchy(self, args):
+        cur_pos = self._nvim.get_current_pos()
+        result = self._rtags_client.dump_class_hierarchy(cur_pos)
+        if result:
+            self._nvim.display_in_preview(result)
+        else:
+            self._nvim.print_message('Could not find class hierarchy')

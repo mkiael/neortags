@@ -9,3 +9,4 @@ noremap <Leader>mv :call NeortagsFindVirtuals()<CR>
 noremap <Leader>mj :call NeortagsJumpTo()<CR>
 noremap <Leader>mi :call NeortagsSymbolInfo()<CR>
 noremap <Leader>mp :call NeortagsPreprocess()<CR>
+noremap <Leader>mh :call NeortagsClassHierarchy()<CR>
