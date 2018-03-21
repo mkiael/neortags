@@ -9,6 +9,7 @@ class Neortags:
     def __init__(self, nvim):
         self._nvim = NvimWrapper(nvim)
         self._rtags_client = RtagsClient()
+        self._include_file_autocomplete = set()
 
     @neovim.command(name='NeortagsFindReferences', sync=False)
     def find_references(self):
@@ -43,15 +44,20 @@ class Neortags:
         result = self._rtags_client.get_preprocessed_file(path)
         self._nvim.display_in_preview(result)
 
-    @neovim.command(name='NeortagsFindIncludeFile', sync=False, nargs=1)
+    @neovim.command(name='NeortagsFindIncludeFile', sync=False, nargs=1, complete='customlist,NeortagsFindIncludeFileCompleteFunc')
     def find_include_file(self, args):
         if args:
             symbol = args[0]
+            self._include_file_autocomplete.add(symbol)
             path = self._nvim.current_path
             result = self._rtags_client.include_file(path, symbol) or "No include found"
             self._nvim.print_message(result)
         else:
             self._nvim.print_message("Must give an argument")
+
+    @neovim.function("NeortagsFindIncludeFileCompleteFunc", sync=True)
+    def find_include_file_complete_func(self, *args, **kwargs) -> list:
+        return list(self._include_file_autocomplete)
 
     @neovim.command(name='NeortagsClassHierarchy', sync=False)
     def class_hierarchy(self):
