@@ -10,20 +10,20 @@ class Neortags:
         self._nvim = NvimWrapper(nvim)
         self._rtags_client = RtagsClient()
 
-    @neovim.function(name='NeortagsFindReferences', sync=False)
-    def find_references(self, args):
+    @neovim.command(name='NeortagsFindReferences', sync=False)
+    def find_references(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.find_references(cur_pos)
         self._nvim.display_in_qf_or_loclist(result)
 
-    @neovim.function(name='NeortagsFindVirtuals', sync=False)
-    def find_virtuals(self, args):
+    @neovim.command(name='NeortagsFindVirtuals', sync=False)
+    def find_virtuals(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.find_virtuals(cur_pos)
         self._nvim.display_in_qf_or_loclist(result)
 
-    @neovim.function(name='NeortagsJumpTo', sync=False)
-    def jump_to(self, args):
+    @neovim.command(name='NeortagsJumpTo', sync=False)
+    def jump_to(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.follow_location(cur_pos)
         if len(result) > 1:
@@ -31,20 +31,20 @@ class Neortags:
         elif len(result) == 1:
             self._nvim.jump_to(result[0])
 
-    @neovim.function(name='NeortagsSymbolInfo', sync=False)
-    def symbol_info(self, args):
+    @neovim.command(name='NeortagsSymbolInfo', sync=False)
+    def symbol_info(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.get_symbol_info(cur_pos)
         self._nvim.print_message('\n'.join(result))
 
-    @neovim.function(name='NeortagsPreprocess', sync=False)
-    def preprocess(self, args):
+    @neovim.command(name='NeortagsPreprocess', sync=False)
+    def preprocess(self):
         path = self._nvim.current_path
         result = self._rtags_client.get_preprocessed_file(path)
         self._nvim.display_in_preview(result)
 
-    @neovim.function(name='NeortagsClassHierarchy', sync=False)
-    def class_hierarchy(self, args):
+    @neovim.command(name='NeortagsClassHierarchy', sync=False)
+    def class_hierarchy(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.dump_class_hierarchy(cur_pos)
         if result:
