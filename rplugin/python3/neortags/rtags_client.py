@@ -30,6 +30,10 @@ class RtagsClient:
         result = self._call_rc('--class-hierarchy {}'.format(cur_pos))
         return result
 
+    def dependencies(self, path: str, filter: str=None) -> str:
+        result = self._call_rc('--dependencies {file} {filter}'.format(file=path, filter=filter))
+        return result
+
     def _call_rc(self, args) -> str:
         cmd = 'rc --absolute-path {}'.format(args)
         try:
