@@ -33,9 +33,7 @@ class NvimWrapper:
 
     def display_in_preview(self, text: str):
         if text:
-            self._nvim.command("pedit! Preview")
-            self._nvim.command("wincmd P")
-            self._nvim.command("wincmd L")
+            self._nvim.command("pedit! Preview | wincmd P | wincmd L")
             self._nvim.current.buffer[:] = text.splitlines()
 
             self._nvim.current.buffer.options['buftype'] = 'nofile'
