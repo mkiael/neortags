@@ -67,5 +67,9 @@ class Neortags:
             self._nvim.print_message('Could not find file dependencies')
 
     @neovim.function("NeortagsDependenciesCompleteFunc", sync=True)
-    def dependencies_complete_func(self, *args, **kwargs) -> list:
-        return ["includes", "included-by", "depends-on", "depended-on", "tree-depends-on", "raw"]
+    def dependencies_complete_func(self, args) -> list:
+        arg_lead = args[0]
+        commands = ["includes", "included-by", "depends-on", "depended-on", "tree-depends-on", "raw"]
+        if arg_lead:
+            return [cmd for cmd in commands if cmd.startswith(arg_lead)]
+        return commands
