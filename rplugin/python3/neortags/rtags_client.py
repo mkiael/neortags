@@ -30,6 +30,10 @@ class RtagsClient:
         result = self._call_rc('--class-hierarchy {}'.format(cur_pos))
         return result
 
+    def dependencies(self, path: str, filter: str=None) -> str:
+        result = self._call_rc('--dependencies {file} {filter}'.format(file=path, filter=filter))
+        return result
+
     def include_file(self, path: str, symbol: str) -> str:
         result = self._call_rc('--current-file {file} --include-file {symbol}'.format(file=path, symbol=symbol))
         return result
