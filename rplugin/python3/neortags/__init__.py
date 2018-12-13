@@ -1,29 +1,29 @@
-import neovim
+import pynvim
 
 from .nvim_wrapper import NvimWrapper
 from .rtags_client import RtagsClient
 
 
-@neovim.plugin
+@pynvim.plugin
 class Neortags:
     def __init__(self, nvim):
         self._nvim = NvimWrapper(nvim)
         self._rtags_client = RtagsClient()
         self._include_file_autocomplete = set()
 
-    @neovim.command(name='NeortagsFindReferences', sync=False)
+    @pynvim.command(name='NeortagsFindReferences', sync=False)
     def find_references(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.find_references(cur_pos)
         self._nvim.display_in_qf_or_loclist(result)
 
-    @neovim.command(name='NeortagsFindVirtuals', sync=False)
+    @pynvim.command(name='NeortagsFindVirtuals', sync=False)
     def find_virtuals(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.find_virtuals(cur_pos)
         self._nvim.display_in_qf_or_loclist(result)
 
-    @neovim.command(name='NeortagsJumpTo', sync=False)
+    @pynvim.command(name='NeortagsJumpTo', sync=False)
     def jump_to(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.follow_location(cur_pos)
@@ -32,19 +32,19 @@ class Neortags:
         elif len(result) == 1:
             self._nvim.jump_to(result[0])
 
-    @neovim.command(name='NeortagsSymbolInfo', sync=False)
+    @pynvim.command(name='NeortagsSymbolInfo', sync=False)
     def symbol_info(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.get_symbol_info(cur_pos)
         self._nvim.print_message('\n'.join(result))
 
-    @neovim.command(name='NeortagsPreprocess', sync=False)
+    @pynvim.command(name='NeortagsPreprocess', sync=False)
     def preprocess(self):
         path = self._nvim.current_path
         result = self._rtags_client.get_preprocessed_file(path)
         self._nvim.display_in_preview(result)
 
-    @neovim.command(name='NeortagsFindIncludeFile', sync=False, nargs=1, complete='customlist,NeortagsFindIncludeFileCompleteFunc')
+    @pynvim.command(name='NeortagsFindIncludeFile', sync=False, nargs=1, complete='customlist,NeortagsFindIncludeFileCompleteFunc')
     def find_include_file(self, args):
         if args:
             symbol = args[0]
@@ -55,11 +55,11 @@ class Neortags:
         else:
             self._nvim.print_message("Must give an argument")
 
-    @neovim.function("NeortagsFindIncludeFileCompleteFunc", sync=True)
+    @pynvim.function("NeortagsFindIncludeFileCompleteFunc", sync=True)
     def find_include_file_complete_func(self, *args, **kwargs) -> list:
         return list(self._include_file_autocomplete)
 
-    @neovim.command(name='NeortagsClassHierarchy', sync=False)
+    @pynvim.command(name='NeortagsClassHierarchy', sync=False)
     def class_hierarchy(self):
         cur_pos = self._nvim.get_current_pos()
         result = self._rtags_client.dump_class_hierarchy(cur_pos)
@@ -68,7 +68,7 @@ class Neortags:
         else:
             self._nvim.print_message('Could not find class hierarchy')
 
-    @neovim.command(name='NeortagsDependencies', sync=False, nargs='?',
+    @pynvim.command(name='NeortagsDependencies', sync=False, nargs='?',
                     complete='customlist,NeortagsDependenciesCompleteFunc')
     def dependencies(self, args):
         path = self._nvim.current_path
@@ -82,7 +82,7 @@ class Neortags:
         else:
             self._nvim.print_message('Could not find file dependencies')
 
-    @neovim.function("NeortagsDependenciesCompleteFunc", sync=True)
+    @pynvim.function("NeortagsDependenciesCompleteFunc", sync=True)
     def dependencies_complete_func(self, args) -> list:
         arg_lead = args[0]
         commands = ["includes", "included-by", "depends-on", "depended-on", "tree-depends-on", "raw"]
