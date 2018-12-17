@@ -1,8 +1,8 @@
-import neovim
+import pynvim
 
 
 class NvimWrapper:
-    def __init__(self, nvim: neovim.Nvim):
+    def __init__(self, nvim: pynvim.Nvim):
         self._nvim = nvim
 
     @property

@@ -1,9 +1,9 @@
 import pytest
-import neovim
+import pynvim
 from neortags import NvimWrapper
 
 
-def get_preview_window(nvim: neovim.Nvim):
+def get_preview_window(nvim: pynvim.Nvim):
     return next((windows for windows in nvim.windows if windows.options['previewwindow']), None)
 
 
